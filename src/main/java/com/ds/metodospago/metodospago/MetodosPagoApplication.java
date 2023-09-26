@@ -10,9 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 public class MetodosPagoApplication {
 
-	public static void main(String[] args) {
-		ConfigurableApplicationContext context = SpringApplication.run(MetodosPagoApplication.class, args);
-		context.getBean(DispatcherServlet.class).setThrowExceptionIfNoHandlerFound(true);
+	public static void main(String[] args) {SpringApplication.run(MetodosPagoApplication.class, args);
 	}
 
 }
