@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/cd-microservice")
-public class MetodosPagoController {
+public class MetodosPagoController{
     @Autowired
     private IMetodosPagoService service;
 
@@ -22,5 +23,6 @@ public class MetodosPagoController {
     public List<RespuestaObtenerMetodosPago> metodosPago(){
         return service.obtnerMetodosPagos();
     }
+
 
 }

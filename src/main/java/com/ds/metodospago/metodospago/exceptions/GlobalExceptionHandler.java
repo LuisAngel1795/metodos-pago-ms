@@ -11,10 +11,12 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
@@ -29,13 +31,6 @@ public class GlobalExceptionHandler{
     private final String proyecto;
     public GlobalExceptionHandler(@Value("${spring.application.name}") String proyecto) {
         this.proyecto = proyecto;
-    }
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<RespuestaExcepcionesDto> noHandlerFoundException(
-            HttpServletRequest request,
-            NoHandlerFoundException exception) {
-        return buildBadRequest("004006", exception);
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
