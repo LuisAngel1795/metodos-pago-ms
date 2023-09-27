@@ -1,13 +1,10 @@
 package com.ds.metodospago.metodospago.config;
 
-
-import com.ds.metodospago.metodospago.exceptions.DataNotFoundException;
 import com.ds.metodospago.metodospago.utils.Utilidades;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
