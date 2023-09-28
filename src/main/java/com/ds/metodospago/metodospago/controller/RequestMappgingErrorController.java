@@ -3,6 +3,7 @@ package com.ds.metodospago.metodospago.controller;
 import com.ds.metodospago.metodospago.config.TraceFilter;
 import com.ds.metodospago.metodospago.constants.Constantes;
 import com.ds.metodospago.metodospago.models.RespuestaExcepcionesDto;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 
 @Controller
+@Slf4j
 public class RequestMappgingErrorController extends AbstractErrorController {
 
     private final String proyecto;
@@ -34,6 +36,7 @@ public class RequestMappgingErrorController extends AbstractErrorController {
         Map<String, Object> errorAttributes = getErrorAttributes(request, ErrorAttributeOptions.defaults());
         HttpStatus status = getStatus(request);
         String mensaje = "Recurso no encontrado: " + errorAttributes.get("path");
+        log.error("El path {} no existe", errorAttributes.get("path"));
         return buildNotFoundException("4041");
     }
 
@@ -41,10 +44,10 @@ public class RequestMappgingErrorController extends AbstractErrorController {
         RespuestaExcepcionesDto errorResponse = new RespuestaExcepcionesDto();
         String codigoError = String.valueOf(HttpStatus.NOT_FOUND.value());
         errorResponse.setCodigo(String.format(codigoError, codigoExcepcion));
-        errorResponse.setMensaje(Constantes.MENSAJE404);
+        errorResponse.setMensaje("Recurso no encontrado");
         errorResponse.setFolio(String.format(Constantes.EXCEPTION,  this.proyecto, MDC.get(TraceFilter.TRACE_ID)));
         errorResponse.setInfo(String.format(Constantes.INFO_TEMPLATE, codigoError ,Constantes.MENSAJE404));
-        errorResponse.setDetalles(Collections.singletonList(Constantes.MENSAJE404));
+        errorResponse.setDetalles(Collections.singletonList("Recurso no encontrado"));
         // Response
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }

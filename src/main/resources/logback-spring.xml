@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="HOME_LOG" value="/home/luis/Documentos/Tiendita/LOG/app.log"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${HOME_LOG}</file>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
+        <encoder>
+                <pattern>
+                    {
+                    "log_data":{
+                    "level": "%level",
+                    "fecha":"%d{HH:mm:ss.SSS}",
+                    "class": "%logger{40}:%line",
+                    "Mensaje": "%thread, %logger{40}:%line: idTransaccion=%X{traceId} | %msg%n"
+                    }
+                    }
+                </pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="OFF"/>
+    <logger name="o.s" level="OFF"/>
+    <logger name="s.d.s.w" level="OFF"/>
+
+    <logger name="cld.tiendita" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

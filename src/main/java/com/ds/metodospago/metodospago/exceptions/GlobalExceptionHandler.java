@@ -1,13 +1,16 @@
 package com.ds.metodospago.metodospago.exceptions;
 
+import com.ds.metodospago.metodospago.config.TraceFilter;
 import com.ds.metodospago.metodospago.constants.Constantes;
 import com.ds.metodospago.metodospago.models.RespuestaExcepcionesDto;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -106,6 +109,11 @@ public class GlobalExceptionHandler{
         return buildBadRequest("004006", ex);
     }
 
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<RespuestaExcepcionesDto> mapException(HttpRequestMethodNotSupportedException ex) {
+        return buildBadRequest("004006", ex);
+    }
+
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<RespuestaExcepcionesDto> mapException(HttpMediaTypeNotSupportedException ex) {
@@ -162,14 +170,12 @@ public class GlobalExceptionHandler{
                 String.format(codigoError, codigoExcepcion)
         );
         errorResponse.setMensaje(Constantes.MENSAJE404);
-        errorResponse.setFolio(
-                String.format(Constantes.EXCEPTION)
+        errorResponse.setFolio(String.format(Constantes.EXCEPTION,  this.proyecto, MDC.get(TraceFilter.TRACE_ID))
         );
-        errorResponse.setInfo(
-                String.format(codigoError, codigoExcepcion)
+        errorResponse.setInfo(String.format(Constantes.INFO_TEMPLATE,codigoError, codigoExcepcion)
         );
 
-        errorResponse.setDetalles(Collections.singletonList(Constantes.MENSAJE404));
+        errorResponse.setDetalles(Collections.singletonList(ex.getMessage()));
 
         // Response
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
@@ -183,14 +189,12 @@ public class GlobalExceptionHandler{
                 String.format( codigoError, codigoExcepcion)
         );
         errorResponse.setMensaje(Constantes.MENSAJE400);
-        errorResponse.setFolio(
-                String.format(Constantes.EXCEPTION)
+        errorResponse.setFolio(String.format(Constantes.EXCEPTION,  this.proyecto, MDC.get(TraceFilter.TRACE_ID))
         );
-        errorResponse.setInfo(
-                String.format( codigoError, codigoExcepcion)
+        errorResponse.setInfo(String.format( Constantes.INFO_TEMPLATE,codigoError, codigoExcepcion)
         );
 
-        errorResponse.setDetalles(Collections.singletonList(Constantes.MENSAJE400));
+        errorResponse.setDetalles(Collections.singletonList(ex.getMessage()));
 
         // Response
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -204,14 +208,11 @@ public class GlobalExceptionHandler{
                 String.format(codigoError, codigoExcepcion)
         );
         errorResponse.setMensaje(Constantes.MENSAJE500);
-        errorResponse.setFolio(
-                String.format(Constantes.EXCEPTION)
+        errorResponse.setFolio(String.format(Constantes.EXCEPTION,  this.proyecto, MDC.get(TraceFilter.TRACE_ID))
         );
-        errorResponse.setInfo(
-                String.format(codigoError, codigoExcepcion)
+        errorResponse.setInfo(String.format(Constantes.INFO_TEMPLATE, codigoError, codigoExcepcion)
         );
-
-        errorResponse.setDetalles(Collections.singletonList(Constantes.MENSAJE500));
+        errorResponse.setDetalles(Collections.singletonList(ex.getMessage()));
 
         // Response
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
