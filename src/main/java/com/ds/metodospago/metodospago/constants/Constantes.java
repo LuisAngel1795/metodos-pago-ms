@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 public class Constantes {
 
     public static final String MENSAJE404 = "Información no encontrada.";
+    public static final String MENSAJE401 = "No estas autorizado, favor de validar";
     public static final String EXCEPTION = "cld-%s-%s";
     public static final String MENSAJE400 = "Solicitud mal formada, favor de validar.";
     public static final String MENSAJE500 = "Problemas al procesar su solicitud, favor de contactar a su administrador.";

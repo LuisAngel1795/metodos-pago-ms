@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -28,6 +31,7 @@ public class TraceFilter implements Filter {
             throws IOException, ServletException {
         long tiempoInicio = System.currentTimeMillis();
         String folio = UUID.randomUUID().toString().replace("-", StringUtils.EMPTY);
+        log.info(MDC.get("Username"));
         MDC.put(TraceFilter.TRACE_ID, folio.toUpperCase(Locale.ENGLISH));
         MDC.put(KEYAPI, API);
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;

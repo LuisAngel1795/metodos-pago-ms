@@ -23,7 +23,6 @@ import java.util.Map;
 public class RequestMappgingErrorController extends AbstractErrorController {
 
     private final String proyecto;
-    public static HttpServletRequest requ;
 
     public RequestMappgingErrorController(ErrorAttributes errorAttributes, @Value("${spring.application.name}") String proyecto) {
         super(errorAttributes);
@@ -32,12 +31,13 @@ public class RequestMappgingErrorController extends AbstractErrorController {
 
     @RequestMapping("/error")
     public ResponseEntity<RespuestaExcepcionesDto> handle404(HttpServletRequest request) {
-        RequestMappgingErrorController.requ = request;
         Map<String, Object> errorAttributes = getErrorAttributes(request, ErrorAttributeOptions.defaults());
         HttpStatus status = getStatus(request);
         String mensaje = "Recurso no encontrado: " + errorAttributes.get("path");
-        log.error("El path {} no existe", errorAttributes.get("path"));
-        return buildNotFoundException("4041");
+        if(status.value()==404)
+        return buildNotFoundException("404");
+        else return buildUnauthorizedException("401");
+
     }
 
     public ResponseEntity<RespuestaExcepcionesDto> buildNotFoundException(String codigoExcepcion){
@@ -50,5 +50,16 @@ public class RequestMappgingErrorController extends AbstractErrorController {
         errorResponse.setDetalles(Collections.singletonList("Recurso no encontrado"));
         // Response
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+    public ResponseEntity<RespuestaExcepcionesDto> buildUnauthorizedException(String codigoExcepcion){
+        RespuestaExcepcionesDto errorResponse = new RespuestaExcepcionesDto();
+        String codigoError = String.valueOf(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setCodigo(String.format(codigoError, codigoExcepcion));
+        errorResponse.setMensaje("No estas autorizado");
+        errorResponse.setFolio(String.format(Constantes.EXCEPTION,  this.proyecto, MDC.get(TraceFilter.TRACE_ID)));
+        errorResponse.setInfo(String.format(Constantes.INFO_TEMPLATE, codigoError ,Constantes.MENSAJE401));
+        errorResponse.setDetalles(Collections.singletonList("No estas autorizado"));
+        // Response
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 }

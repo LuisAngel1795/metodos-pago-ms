@@ -14,14 +14,10 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 
 
@@ -40,6 +36,8 @@ public class GlobalExceptionHandler{
     public ResponseEntity<RespuestaExcepcionesDto> mapException(MissingRequestHeaderException ex) {
         return buildBadRequest("004001",ex);
     }
+
+
 
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -96,11 +94,6 @@ public class GlobalExceptionHandler{
             return buildUnauthorizedException("04011", ex);
         }
         return buildBadRequest("04005", ex);
-    }*/
-
-    /*@ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<RespuestaExcepcionesDto> mapException(UnauthorizedException ex) {
-        return buildUnauthorizedException("04012", ex);
     }*/
 
 

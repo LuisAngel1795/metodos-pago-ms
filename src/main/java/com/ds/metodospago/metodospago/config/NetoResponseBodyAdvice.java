@@ -38,7 +38,7 @@ public class NetoResponseBodyAdvice implements ResponseBodyAdvice<Object>{
                                   ServerHttpResponse response) {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
                 Map<String, Object> bodyResponse = new LinkedHashMap<>();
-                if(servletResponse.getStatus()!=404){
+                if(servletResponse.getStatus()!=404 && servletResponse.getStatus()!=401){
                     bodyResponse.put("mensaje", "Operacion exitosa");
                     bodyResponse.put("folio", String.format("cld-%s-%s",this.proyecto, MDC.get(TraceFilter.TRACE_ID)));
                     bodyResponse.put("resultado", body);
